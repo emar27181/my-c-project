@@ -1,0 +1,365 @@
+/* ******************************************************* */
+/* このファイルには２つの例題が入っている．                */
+/*                                                         */
+/*    (1) 1 2 + 5 6 * 4 + + = の計算例                     */
+/*        こちらは正常終了の例                             */
+/*                                                         */
+/*    (2) 2 3 + 4 * / 7 + 5 * = の計算例                   */
+/*        こちらは途中でエラーが起こる例．入力の処理箇所と */
+/*	エラー発生のタイミングを追いかけることで，どんな   */
+/*	情報を出せばユーザが分かりやすいかの参考になる     */
+/*                                                         */
+/* 各例題の始まりはコメント始まり /* を探せばよい．        */
+/* ******************************************************* */
+
+/* ******************************************************* */
+/*     1 2 + 5 6 * 4 + + = の計算例                        */
+/*         このツールでは = で入力の終了を表す．           */
+/*         皆さんは 行頭で C-D (コントロールキーを押し     */
+/*         ながらD）で入力の終了とする．                   */
+/* ******************************************************* */
+
+
+
+Postfix expression (terminate with '='): 
+    Input and current position: 1 2 + 5 6 * 4 + + =
+                               A
+                               |(*'_'*)
+
+-- No. 0
+    Initialize stack
+
+    Stack is
+      |(EMPTY)|
+      +-------+ <- sp==???
+
+  Command (Enter, c, q): 
+-- No. 1
+    Input and current position: 1 2 + 5 6 * 4 + + =
+                                 A
+                                 |(*'_'*)
+    Token = NUMBER(num=1)
+
+    Since the token is a NUMBER, push(1)
+
+    Stack is
+      |      1 | <- sp==0
+      +--------+
+
+-- No. 2
+    Input and current position: 1 2 + 5 6 * 4 + + =
+                                   A
+                                   |(*'_'*)
+    Token = NUMBER(num=2)
+
+    Since the token is a NUMBER, push(2)
+
+    Stack is
+      |      2 | <- sp==1
+      |      1 |
+      +--------+
+
+-- No. 3
+    Input and current position: 1 2 + 5 6 * 4 + + =
+                                     A
+                                     |(*'_'*)
+    Token = PLUS
+
+    Since the token is a binary operator, pop 2 elements and
+    push the result of the computation PLUS.
+
+      y = pop();      (y == 2)
+
+    Stack is
+      |      1 | <- sp==0
+      +--------+
+
+      x = pop();      (x == 1)
+
+    Stack is
+      |(EMPTY)|
+      +-------+ <- sp==???
+
+      z = x + y;      (z == 3)
+      push(z);
+
+    Stack is
+      |      3 | <- sp==0
+      +--------+
+
+-- No. 4
+    Input and current position: 1 2 + 5 6 * 4 + + =
+                                       A
+                                       |(*'_'*)
+    Token = NUMBER(num=5)
+
+    Since the token is a NUMBER, push(5)
+
+    Stack is
+      |      5 | <- sp==1
+      |      3 |
+      +--------+
+
+-- No. 5
+    Input and current position: 1 2 + 5 6 * 4 + + =
+                                         A
+                                         |(*'_'*)
+    Token = NUMBER(num=6)
+
+    Since the token is a NUMBER, push(6)
+
+    Stack is
+      |      6 | <- sp==2
+      |      5 |
+      |      3 |
+      +--------+
+
+-- No. 6
+    Input and current position: 1 2 + 5 6 * 4 + + =
+                                           A
+                                           |(*'_'*)
+    Token = MULT
+
+    Since the token is a binary operator, pop 2 elements and
+    push the result of the computation MULT.
+
+      y = pop();      (y == 6)
+
+    Stack is
+      |      5 | <- sp==1
+      |      3 |
+      +--------+
+
+      x = pop();      (x == 5)
+
+    Stack is
+      |      3 | <- sp==0
+      +--------+
+
+      z = x * y;      (z == 30)
+      push(z);
+
+    Stack is
+      |     30 | <- sp==1
+      |      3 |
+      +--------+
+
+-- No. 7
+    Input and current position: 1 2 + 5 6 * 4 + + =
+                                             A
+                                             |(*'_'*)
+    Token = NUMBER(num=4)
+
+    Since the token is a NUMBER, push(4)
+
+    Stack is
+      |      4 | <- sp==2
+      |     30 |
+      |      3 |
+      +--------+
+
+-- No. 8
+    Input and current position: 1 2 + 5 6 * 4 + + =
+                                               A
+                                               |(*'_'*)
+    Token = PLUS
+
+    Since the token is a binary operator, pop 2 elements and
+    push the result of the computation PLUS.
+
+      y = pop();      (y == 4)
+
+    Stack is
+      |     30 | <- sp==1
+      |      3 |
+      +--------+
+
+      x = pop();      (x == 30)
+
+    Stack is
+      |      3 | <- sp==0
+      +--------+
+
+      z = x + y;      (z == 34)
+      push(z);
+
+    Stack is
+      |     34 | <- sp==1
+      |      3 |
+      +--------+
+
+-- No. 9
+    Input and current position: 1 2 + 5 6 * 4 + + =
+                                                 A
+                                                 |(*'_'*)
+    Token = PLUS
+
+    Since the token is a binary operator, pop 2 elements and
+    push the result of the computation PLUS.
+
+      y = pop();      (y == 34)
+
+    Stack is
+      |      3 | <- sp==0
+      +--------+
+
+      x = pop();      (x == 3)
+
+    Stack is
+      |(EMPTY)|
+      +-------+ <- sp==???
+
+      z = x + y;      (z == 37)
+      push(z);
+
+    Stack is
+      |     37 | <- sp==0
+      +--------+
+
+
+----- End of Input
+
+    Input and current position: 1 2 + 5 6 * 4 + + =
+                                                  A
+                                                  |(*'_'*)
+    Stack is
+      |     37 | <- sp==0
+      +--------+
+
+Answer = 37
+
+
+/* ******************************************************* */
+/*     2 3 + 4 * / 7 + 5 * = の計算例                      */
+/*         これはエラーが起こる例                          */
+/*         入力のどこを計算しているか追いかけているので    */
+/*         どこでエラーが起こるかが分かる                  */
+/* ******************************************************* */
+
+
+Postfix expression (terminate with '='): 
+    Input and current position: 2 3 + 4 * / 7 + 5 * =
+                               A
+                               |(*'_'*)
+
+-- No. 0
+    Initialize stack
+
+    Stack is
+      |(EMPTY)|
+      +-------+ <- sp==???
+
+-- No. 1
+    Input and current position: 2 3 + 4 * / 7 + 5 * =
+                                 A
+                                 |(*'_'*)
+    Token = NUMBER(num=2)
+
+    Since the token is a NUMBER, push(2)
+
+    Stack is
+      |      2 | <- sp==0
+      +--------+
+
+-- No. 2
+    Input and current position: 2 3 + 4 * / 7 + 5 * =
+                                   A
+                                   |(*'_'*)
+    Token = NUMBER(num=3)
+
+    Since the token is a NUMBER, push(3)
+
+    Stack is
+      |      3 | <- sp==1
+      |      2 |
+      +--------+
+
+-- No. 3
+    Input and current position: 2 3 + 4 * / 7 + 5 * =
+                                     A
+                                     |(*'_'*)
+    Token = PLUS
+
+    Since the token is a binary operator, pop 2 elements and
+    push the result of the computation PLUS.
+
+      y = pop();      (y == 3)
+
+    Stack is
+      |      2 | <- sp==0
+      +--------+
+
+      x = pop();      (x == 2)
+
+    Stack is
+      |(EMPTY)|
+      +-------+ <- sp==???
+
+      z = x + y;      (z == 5)
+      push(z);
+
+    Stack is
+      |      5 | <- sp==0
+      +--------+
+
+-- No. 4
+    Input and current position: 2 3 + 4 * / 7 + 5 * =
+                                       A
+                                       |(*'_'*)
+    Token = NUMBER(num=4)
+
+    Since the token is a NUMBER, push(4)
+
+    Stack is
+      |      4 | <- sp==1
+      |      5 |
+      +--------+
+
+-- No. 5
+    Input and current position: 2 3 + 4 * / 7 + 5 * =
+                                         A
+                                         |(*'_'*)
+    Token = MULT
+
+    Since the token is a binary operator, pop 2 elements and
+    push the result of the computation MULT.
+
+      y = pop();      (y == 4)
+
+    Stack is
+      |      5 | <- sp==0
+      +--------+
+
+      x = pop();      (x == 5)
+
+    Stack is
+      |(EMPTY)|
+      +-------+ <- sp==???
+
+      z = x * y;      (z == 20)
+      push(z);
+
+    Stack is
+      |     20 | <- sp==0
+      +--------+
+
+-- No. 6
+    Input and current position: 2 3 + 4 * / 7 + 5 * =
+                                           A
+                                           |(*'_'*)
+    Token = DIV
+
+    Since the token is a binary operator, pop 2 elements and
+    push the result of the computation DIV.
+
+      y = pop();      (y == 20)
+
+    Stack is
+      |(EMPTY)|
+      +-------+ <- sp==???
+
+      x = pop();    Stack is
+      |(EMPTY)|
+      +-------+ <- sp==???
+
+stack empty error.
